@@ -533,7 +533,7 @@
   }
   .country-menu h3 a:hover,
   .navbar-menu h3 a:hover {
-    background-color: red;
+    background-color: teal;
   }
 
   .navbar-menu {
