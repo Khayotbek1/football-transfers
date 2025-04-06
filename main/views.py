@@ -28,11 +28,10 @@ class ClubDetailsView(View):
 
 class LatestTransfersView(View):
     def get(self, req):
-        transfers = Transfer.objects.all()
+        transfers = Transfer.objects.filter(season=Season.objects.last())
         context = {
             'transfers': transfers
         }
-
         return render(req, 'latest-transfers.html', context)
 
 
@@ -44,19 +43,34 @@ class PlayerView(View):
         }
         return render(req, 'players.html', context)
 
+
 class PlayerU20View(View):
-    def get(self,req):
+    def get(self, req):
         players = Player.objects.filter(age__lte=20)
         context = {
             'players': players
         }
-        return render(req, 'U-20 players.html',context)
+        return render(req, 'U-20 players.html', context)
 
 
 class TryoutsView(View):
-    def get(self,req):
+    def get(self, req):
         return render(req, 'tryouts.html')
 
+
 class AboutView(View):
-    def get(self,req):
+    def get(self, req):
         return render(req, 'about.html')
+
+
+class TransferRecordsView(View):
+    def get(self, req):
+        transfers = Transfer.objects.order_by('-price')
+        context = {
+            'transfers': transfers
+        }
+        return render(req, 'stats/transfer-records.html', context)
+
+class StatsView(View):
+    def get(self,req):
+        return render(req, 'stats.html')

@@ -15,6 +15,8 @@ urlpatterns = [
     path('u20-players/', PlayerU20View.as_view(), name='u-20players'),
     path('tryouts/', TryoutsView.as_view(), name='tryouts'),
     path('about/', AboutView.as_view(), name='about'),
+    path('transfer-records/', TransferRecordsView.as_view(), name='transfer-records'),
+    path('stats/', StatsView.as_view(), name='stats'),
 
 ]
 
