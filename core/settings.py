@@ -23,14 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cy4oi=bci5r8o2s9hm)&zyvo^x(=_*(*dks1&-79l!)(ym2kql'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -130,3 +131,48 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Football Admin",
+    "site_header": "Football Manager",
+    "site_brand": "Football Admin",
+    "site_logo": "clubs/logo.png",  # Static fayl bo‘lishi kerak
+    "welcome_sign": "Welcome to Football Admin",
+    "copyright": "Football Inc",
+    "search_model": ["your_app_name.Player", "your_app_name.Club", "your_app_name.Country"],
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "your_app_name.Player"},
+        {"model": "your_app_name.Club"},
+        {"app": "your_app_name"},
+    ],
+
+    "usermenu_links": [
+        {"name": "Django", "url": "https://www.djangoproject.com", "new_window": True},
+    ],
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": ["your_app_name"],
+
+    "icons": {
+        "your_app_name.Season": "fa fa-calendar",
+        "your_app_name.Country": "fa fa-flag",
+        "your_app_name.Club": "fa fa-futbol",
+        "your_app_name.Player": "fa fa-user",
+        "your_app_name.Transfer": "fa fa-random",
+        "auth.User": "fa fa-user",
+        "auth.Group": "fa fa-users",
+    },
+
+    "default_icon_parents": "fa fa-folder",
+    "default_icon_children": "fa fa-circle",
+
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+}
+

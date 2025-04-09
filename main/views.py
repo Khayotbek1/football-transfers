@@ -1,3 +1,5 @@
+from django.db.models import F, FloatField, ExpressionWrapper, Sum
+from django.db.models.functions import Abs
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from .models import *
@@ -71,6 +73,56 @@ class TransferRecordsView(View):
         }
         return render(req, 'stats/transfer-records.html', context)
 
+
 class StatsView(View):
-    def get(self,req):
+    def get(self, req):
         return render(req, 'stats.html')
+
+
+class Top15PredictionsView(View):
+    def get(self, request):
+        transfers = Transfer.objects.annotate(
+            accuracy=ExpressionWrapper(
+                100 - (Abs(F('price') - F('price_tft')) / F('price') * 100),
+                output_field=FloatField()
+            )
+        ).order_by('-accuracy')[:150]
+        context = {
+            'transfers': transfers
+        }
+        return render(request, 'stats/150-accurate-predictions.html', context)
+
+
+class Top50ExpenditureView(View):
+    def get(self, request):
+        latest_season = Season.objects.last()
+        clubs = Club.objects.annotate(
+            total_income=Sum(
+                'club_to__price',
+                filter=models.Q(club_to__season=latest_season)
+            )
+        ).order_by('-total_income')[:50]
+        context = {
+            'clubs': clubs,
+            'season': latest_season,
+        }
+
+        return render(request, 'stats/top-50-clubs-by-expenditure.html', context)
+
+
+
+class Top50IncomesView(View):
+    def get(self, request):
+        latest_season = Season.objects.last()
+        clubs = Club.objects.annotate(
+            total_income=Sum(
+                'club_from__price',
+                filter=models.Q(club_from__season=latest_season)
+            )
+        ).order_by('-total_income')[:50]
+        context = {
+            'clubs': clubs,
+            'season': latest_season,
+        }
+
+        return render(request, 'stats/top-50-clubs-by-income.html', context)
